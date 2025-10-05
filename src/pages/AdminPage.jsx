@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { useAdminProfiles } from '../hooks/useAdminProfiles';
+import { useNavigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 
 function AdminPage() {
     const [currentUserRole, setCurrentUserRole] = useState(null);
+    const navigate = useNavigate();
 
     // 1. CHAMA O HOOK REACT QUERY
     // Este hook gerencia a busca segura de dados, cache, loading e erros.
@@ -38,6 +40,7 @@ function AdminPage() {
         // Você pode usar o useNavigate() do react-router-dom para ir para a tela de edição
         console.log(`Abrir tela de edição para o ID: ${profileId}`);
         // Ex: navigate(`/admin/edit/${profileId}`);
+        navigate(`/admin/edit/${profileId}`); // Navega para a nova página
     };
 
     // Lógica de UX: Determina se o usuário logado PODE interagir com o perfil alvo

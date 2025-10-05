@@ -22,6 +22,7 @@ const Profile = lazy(() => import('./pages/Profile'));
 const Settings = lazy(() => import('./pages/Settings'));
 const NotFound = lazy(() => import('./components/NotFound'));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
+const AdminEditProfilePage = lazy(() => import('./pages/AdminEditProfilePage'));
 
 // Componente Layout Protegido
 const ProtectedLayout = () => (
@@ -57,6 +58,10 @@ function App() {
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/settings" element={<Settings />} />
                         <Route path="/admin" element={<AdminPage />} />
+                        <Route
+                            path="/admin/edit/:profileId"
+                            element={<AdminEditProfilePage />}
+                        />
                     </Route>
 
                     {/* Rotas Públicas */}
