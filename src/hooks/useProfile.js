@@ -31,7 +31,7 @@ export const useFetchProfile = () => {
     useEffect(() => {
         supabase.auth.getUser().then(({ data: { user } }) => {
             setUserId(user?.id || null);
-            setIsLoadingAuth(false); // 💡 DESLIGA O CARREGAMENTO AQUI
+            setIsLoadingAuth(false); //
         });
     }, []);
 

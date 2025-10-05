@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
-import { useAdminProfiles } from '../hooks/useAdminProfiles'; // Importa o novo hook
+import { useAdminProfiles } from '../hooks/useAdminProfiles';
+import Spinner from '../components/Spinner';
 
 function AdminPage() {
     const [currentUserRole, setCurrentUserRole] = useState(null);
@@ -69,7 +70,8 @@ function AdminPage() {
     if (isLoading || currentUserRole === null) {
         return (
             <div className="text-center p-8">
-                <p>Carregando painel de administração...</p>
+                <Spinner size="lg" />
+                <p className="mt-4 text-gray-500">Buscando perfis...</p>
             </div>
         );
     }
