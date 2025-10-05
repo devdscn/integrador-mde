@@ -6,12 +6,14 @@ import {
     UserIcon,
     Bars3Icon,
     XMarkIcon,
+    AdjustmentsHorizontalIcon,
 } from '@heroicons/react/24/outline';
 
 const navItems = [
     { name: 'Dashboard', to: '/dashboard', icon: HomeIcon },
     { name: 'Configurações', to: '/settings', icon: Cog6ToothIcon },
     { name: 'Profile', to: '/profile', icon: UserIcon },
+    { name: 'Administração', to: '/admin', icon: AdjustmentsHorizontalIcon },
 ];
 
 function Sidebar() {

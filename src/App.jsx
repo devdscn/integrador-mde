@@ -21,6 +21,7 @@ const Login = lazy(() => import('./pages/Login'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Settings = lazy(() => import('./pages/Settings'));
 const NotFound = lazy(() => import('./components/NotFound'));
+const AdminPage = lazy(() => import('./pages/AdminPage'));
 
 // Componente Layout Protegido
 const ProtectedLayout = () => (
@@ -55,6 +56,7 @@ function App() {
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/settings" element={<Settings />} />
+                        <Route path="/admin" element={<AdminPage />} />
                     </Route>
 
                     {/* Rotas Públicas */}
