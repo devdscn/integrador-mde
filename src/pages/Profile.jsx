@@ -1,17 +1,19 @@
 // src/pages/Profile.jsx
 import React, { useState, useEffect } from 'react';
 import { useFetchProfile, useUpdateProfile } from '../hooks/useProfile';
+// IMPORTAR O SPINNER
+import Spinner from '../components/Spinner';
 
 const REQUIRED_FIELDS = ['nome', 'apelido', 'telefone'];
 
 function Profile() {
-    // 💡 RECEBE isLoadingAuth DO HOOK
+    // RECEBE isLoadingAuth DO HOOK
     const {
         data: profileData,
         isLoading: isFetching,
         isFetched,
         error: fetchError,
-        isLoadingAuth, // 💡 NOVO: Estado de carregamento da Autenticação
+        isLoadingAuth, //  NOVO: Estado de carregamento da Autenticação
     } = useFetchProfile();
 
     const profileExists = profileData !== null && profileData !== undefined;
@@ -88,13 +90,9 @@ function Profile() {
 
     const isLoading = isFetching || updateMutation.isPending;
 
-    // 💡 VERIFICAÇÃO DE CARREGAMENTO CORRIGIDA: Espera por isLoadingAuth OU isFetching
+    // VERIFICAÇÃO DE CARREGAMENTO CORRIGIDA: Espera por isLoadingAuth OU isFetching
     if (isLoadingAuth || (isFetching && !isFetched)) {
-        return (
-            <div className="flex items-center justify-center min-h-[50vh] dark:text-white">
-                Carregando dados do perfil...
-            </div>
-        );
+        return <Spinner size="lg" />;
     }
 
     // Lógica de Erro

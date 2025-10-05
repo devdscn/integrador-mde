@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { lazy, Suspense } from 'react';
 import {
     BrowserRouter as Router,
@@ -7,34 +8,32 @@ import {
     Navigate,
 } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
-
 import AuthGuard from './components/AuthGuard';
-import Header from './components/Header';
 import Sidebar from './components/Sidebar';
-import Login from './pages/Login'; // O Login não é lazy para carregamento imediato
+import Header from './components/Header';
 
-// Rotas Lazy Load (melhora o desempenho)
+// 💡 IMPORTAR O SPINNER
+import Spinner from './components/Spinner';
+
+// Lazy Load dos componentes de página
 const Dashboard = lazy(() => import('./pages/Dashboard'));
-const Settings = lazy(() => import('./pages/Settings'));
+const Login = lazy(() => import('./pages/Login'));
 const Profile = lazy(() => import('./pages/Profile'));
+const Settings = lazy(() => import('./pages/Settings'));
+const NotFound = lazy(() => import('./components/NotFound'));
 
 // Componente Layout Protegido
 const ProtectedLayout = () => (
     <AuthGuard>
-        <div className="flex h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+        <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
             <Sidebar />
             <div className="flex-1 flex flex-col overflow-hidden">
                 <Header />
-                {/* Conteúdo principal com scroll */}
                 <main className="flex-1 overflow-x-hidden overflow-y-auto p-6">
-                    <Suspense
-                        fallback={
-                            <div className="flex items-center justify-center h-full dark:text-white">
-                                Carregando Conteúdo...
-                            </div>
-                        }
-                    >
-                        <Outlet /> {/* Renderiza a rota filha aqui */}
+                    <Suspense fallback={<Spinner size="lg" />}>
+                        {' '}
+                        {/* 💡 SPINNER NO LAYOUT PROTEGIDO */}
+                        <Outlet />
                     </Suspense>
                 </main>
             </div>
@@ -47,28 +46,38 @@ function App() {
         <ThemeProvider>
             <Router>
                 <Routes>
-                    {/* Rota de Login (Não Protegida) */}
-                    <Route path="/login" element={<Login />} />
-
-                    {/* Rotas Protegidas (Usando o Layout com Header e Sidebar) */}
+                    {/* Rotas Protegidas */}
                     <Route element={<ProtectedLayout />}>
-                        {/* Redireciona a raiz (/) para /dashboard */}
                         <Route
                             path="/"
                             element={<Navigate to="/dashboard" replace />}
                         />
                         <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/settings" element={<Settings />} />
                         <Route path="/profile" element={<Profile />} />
+                        <Route path="/settings" element={<Settings />} />
                     </Route>
 
-                    {/* Rota 404 */}
+                    {/* Rotas Públicas */}
+                    <Route
+                        path="/login"
+                        element={
+                            <Suspense fallback={<Spinner size="lg" />}>
+                                {' '}
+                                {/* 💡 SPINNER NAS ROTAS PÚBLICAS */}
+                                <Login />
+                            </Suspense>
+                        }
+                    />
+
+                    {/* Catch-all para 404 */}
                     <Route
                         path="*"
                         element={
-                            <h1 className="text-3xl text-center p-10 dark:text-white dark:bg-gray-900 min-h-screen">
-                                404 | Página Não Encontrada
-                            </h1>
+                            <Suspense fallback={<Spinner size="lg" />}>
+                                {' '}
+                                {/* 💡 SPINNER NO CATCH-ALL */}
+                                <NotFound />
+                            </Suspense>
                         }
                     />
                 </Routes>
