@@ -8,10 +8,23 @@ import {
     ArrowLeftEndOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
+// 💡 ADICIONADO: Importar o hook que busca os dados do perfil
+import { useFetchProfile } from '../hooks/useProfile';
 
 function Header() {
     const { isDarkTheme, toggleTheme } = useTheme();
     const navigate = useNavigate();
+
+    // 💡 ADICIONADO: Busca os dados do perfil com React Query
+    // isProfileLoading é o estado que usaremos para o skeleton/carregamento
+    const { data: profileData, isLoading: isProfileLoading } =
+        useFetchProfile();
+
+    // 💡 ADICIONADO: Define qual nome exibir (preferência: Apelido, fallback: Nome)
+    const displayName =
+        'Olá, ' + profileData?.apelido ||
+        'Olá, ' + profileData?.nome ||
+        'Perfil';
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
@@ -19,7 +32,7 @@ function Header() {
         navigate('/login', { replace: true });
     };
 
-    // URL mockada
+    // URL mockada (você pode substituir isso pela URL do avatar do Supabase Storage se tiver uma)
     const avatarUrl = 'https://i.pravatar.cc/150?img=3';
 
     return (
@@ -29,6 +42,24 @@ function Header() {
             </h1>
 
             <div className="flex items-center space-x-4">
+                {/* 💡 ADICIONADO: Informação do Nome do Usuário */}
+                <div
+                    className="hidden sm:flex flex-col items-end text-sm cursor-pointer"
+                    onClick={() => navigate('/profile')} // Clicável para ir ao perfil
+                >
+                    {isProfileLoading ? (
+                        // Skeleton Effect enquanto carrega
+                        <div className="h-4 w-20 mt-1 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                    ) : (
+                        <span className="font-medium text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                            {displayName}
+                        </span>
+                    )}
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {isProfileLoading ? 'Carregando...' : profileData?.role}
+                    </span>
+                </div>
+
                 {/* 1. Botão de Alternar Tema */}
                 <button
                     onClick={toggleTheme}
@@ -44,8 +75,8 @@ function Header() {
                     )}
                 </button>
 
-                {/* 2. Avatar e Menu */}
-                <div className="flex items-center space-x-2 relative group">
+                {/* 2. Área do Perfil (Dropdown) */}
+                <div className="relative group">
                     <img
                         src={avatarUrl}
                         alt="Avatar do Usuário"

@@ -16,6 +16,7 @@ const DB_COLUMNS = [
     'cep',
     'cpf',
     'cnh',
+    'role',
 ];
 
 /**
